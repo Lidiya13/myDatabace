@@ -2,10 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { DogRepository } from './dog.repository';
 import { DogUpdateDto } from './dog-update.dto';
 import { DogEntity } from '../user/entity/dog.entity';
+import { DogInterface } from './dog.interface';
+import { DogCreateDto } from './dog-create.dto';
 
 @Injectable()
 export class DogService {
-  constructor(
+  constructor( /*функция которая вызывается 1 раз при создании экземпляра класса*/
     private readonly dogRepository: DogRepository
   ){}
   async updateDog(dogId:number, dogUpdate:DogUpdateDto):Promise<DogEntity>{ /*не забывать тайпинг*/
@@ -24,5 +26,8 @@ export class DogService {
     await this.dogRepository.remove(dog1);
     /*return dog1; - возврат удаляемой сущности*/
   }
-
+  async createDog(dog: DogCreateDto){
+    const dog2=await this.dogRepository.create(dog);
+    await this.dogRepository.save(dog2);
+    }
 }

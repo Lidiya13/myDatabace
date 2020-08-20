@@ -3,6 +3,9 @@ import { DogService } from './dog.service';
 import { DogUpdateDto } from './dog-update.dto';
 import { DogEntity } from '../user/entity/dog.entity';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { DogInterface } from './dog.interface';
+import { DogCreateDto } from './dog-create.dto';
+import { MessageDto } from './message.dto';
 
 @Controller('dog') /*связь с внешним миром*/
 export class DogController {
@@ -22,5 +25,13 @@ export class DogController {
     /*return this.dogService.removeDog(dogId);*/
     await this.dogService.removeDog(dogId);
     return {message:'Собака успешно удалена!'};
+  }
+
+  @Post()
+  @ApiOperation({ summary: 'добавление собаки' })
+  @ApiResponse({ status: 201, type: DogEntity, description: 'данные по собаке внесены' })
+  async create (@Body() dogCreateDto: DogCreateDto):Promise<MessageDto>{
+    await this.dogService.createDog(dogCreateDto);
+    return new MessageDto('Данные внесены');
   }
 }
